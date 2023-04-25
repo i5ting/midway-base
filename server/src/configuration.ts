@@ -7,11 +7,13 @@ import { ReportMiddleware } from './middleware/report.middleware';
 import * as view from '@midwayjs/view-nunjucks';
 import { WeatherErrorFilter } from './filter/weather.filter';
 import * as orm from '@midwayjs/typeorm';
+import * as crossDomain from "@midwayjs/cross-domain";
 
 @Configuration({
   imports: [
     orm,
     koa,
+    crossDomain,
     validate,
     {
       component: info,

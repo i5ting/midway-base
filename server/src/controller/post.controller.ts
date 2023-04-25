@@ -9,17 +9,17 @@ import {
   Param,
   Query,
 } from "@midwayjs/core";
-import { UserService } from "../service/user.service";
+import { PostService } from "../service/post.service";
 import { Context } from "@midwayjs/koa";
-import { User } from "../entity/user.entity";
+import { Post as PostEntity } from "../entity/post.entity";
 
-@Controller("/users")
-export class UserController {
+@Controller("/posts")
+export class PostController {
   @Inject()
   ctx: Context;
 
   @Inject()
-  service: UserService;
+  service: PostService;
 
   @Del("/:id")
   async findOne2(@Param("id") uid: string) {
@@ -54,10 +54,10 @@ export class UserController {
   }
 
   @Post("/")
-  async create(@Body() user: User) {
+  async create(@Body() user: PostEntity) {
     console.log(" create");
     console.dir(user);
-    const a = await this.service.create(user);
+    const a = await this.service.save(user);
 
     return a;
   }

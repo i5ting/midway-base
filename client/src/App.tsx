@@ -17,9 +17,9 @@ import simpleRestProvider from "ra-data-simple-rest";
 //   "X-Total-Count"
 // );
 
-// const dataProvider = jsonServerProvider("http://127.0.0.1:7001");
+const dataProvider = jsonServerProvider("http://127.0.0.1:7003");
 
-const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
+// const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
 
 const App = () => (
   <Admin
