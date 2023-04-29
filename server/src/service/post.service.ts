@@ -1,7 +1,7 @@
+import { Repository } from "typeorm";
 import { Provide } from "@midwayjs/core";
 import { InjectEntityModel } from "@midwayjs/typeorm";
 import { Post } from "../entity/post.entity";
-import { Repository } from "typeorm";
 import { BaseService } from "../core/base.service";
 
 @Provide()

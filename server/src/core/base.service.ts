@@ -30,25 +30,40 @@ export abstract class BaseService<T extends BaseEntity> {
     await this.model.delete(id);
   }
 
+  async _getWhere(tableName, filter){
+    let where = ""
+    Object.keys(filter).map(function(i){
+      return where === '' ? where+=`${tableName}.${i} = :${i}`:where+=` and ${tableName}.${i} = :${i}`
+    })
+    return where
+  }
+
   async find (
-    page: number,
-    perPage: number,
-    filter: string,
-    order: "DESC" | "ASC",
-    sort: string
+    _start: any,
+    _end: any,
+    _order: any,
+    _sort: any,
+    _filter: any
   ) {
     console.dir(this.model)
-    console.dir(page);
-    console.dir(perPage);
-    console.dir(filter);
-    console.dir(order);
-    console.dir(sort);
+    console.dir(_start);
+    console.dir(_end);
+    console.dir(_filter);
+    console.dir(_order);
+    console.dir(_sort);
+
+    let tableName = this.constructor.name.replace('Service',"").toLowerCase()
+    console.dir(tableName)
+
+    let where = await this._getWhere(tableName, _filter)
+
+    console.dir(where)
 
     let firstPhoto = await this.model
-      .createQueryBuilder("user")
-      // .where("photo.isPublished = true")
+      .createQueryBuilder(tableName)
+      .where(where, _filter)
       // .andWhere("(photo.name = :photoName OR photo.name = :bearName)")
-      .orderBy(sort, order || "ASC")
+      .orderBy(_sort, _order || "ASC")
       // .skip(5)
       .take(10)
       // .setParameters({ photoName: "My", bearName: "Mishka" })

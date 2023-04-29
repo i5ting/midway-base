@@ -17,7 +17,7 @@ import {
 } from "react-admin";
 
 const postFilters = [
-  <TextInput source="q" label="Search" alwaysOn />,
+  <TextInput source="id" label="Search" alwaysOn />,
   <ReferenceInput source="userId" label="User" reference="users" />,
 ];
 
@@ -26,6 +26,7 @@ export const PostList = () => (
     <Datagrid rowClick="edit">
       <TextField source="id" />
       <TextField source="title" />
+      <ReferenceField source="userId" reference="users" />
       <EditButton label="编辑" />
       <ShowButton label="查看" />
       <DeleteButton label="删除" />

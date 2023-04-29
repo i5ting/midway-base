@@ -1,3 +1,4 @@
+import { BaseService } from "./base.service";
 import {
   MidwayWebRouterService,
   Controller,
@@ -10,37 +11,19 @@ import {
   Param,
   // Query,
 } from "@midwayjs/core";
-import { UserService } from "../service/user.service";
 import { Context } from "@midwayjs/koa";
-import { User } from "../entity/user.entity";
+import { BaseEntity } from "../core/entities/base.entity";
 
-@Controller("/users")
-export class UserController {
+@Controller("/base")
+export abstract class BaseController<T extends BaseService<BaseEntity>> {
   @Inject()
   ctx: Context;
 
   @Inject()
-  service: UserService;
-
-
-  @Inject()
   webRouterService: MidwayWebRouterService;
 
-
-  async onReady() {
-    console.dir('onReady'+this)
-    console.dir('userPostController onReady')
-
-     this.webRouterService.addRouter(async (ctx) => {
-      return 'hello world';
-    }, {
-      url: '/2',
-      requestMethod: 'GET',
-    });
-
-
-  }
-
+  @Inject()
+  service: T;
 
   @Del("/:id")
   async findOne2(@Param("id") uid: string) {
@@ -65,28 +48,41 @@ export class UserController {
     return user;
   }
 
-  // @Get("/:id")
-  // async findOne(@Param("id") uid: string) {
-  //   console.log(" uid = ") + uid;
-  //   const a = await this.service.findById(uid);
-  //   // console.dir(a[0]);
+  @Get("/:id")
+  async findOne(@Param("id") uid: string) {
+    console.log(" uid = ") + uid;
+    const a = await this.service.findById(uid);
+    // console.dir(a[0]);
 
-  //   return a;
-  // }
+    return a;
+  }
 
   @Post("/")
-  async create(@Body() user: User) {
+  async create(@Body() user: BaseEntity) {
     console.log(" create");
     console.dir(user);
-    const a = await this.service.create(user);
+    const a = await this.service.save(user);
 
     return a;
   }
 
   @Get("/")
   async home(
-
+    // @Query("q") filter: string,
+    // @Query("_order") order: "DESC" | "ASC",
+    // @Query("_sort") sort: string,
+    // @Query("_end") end: number
   ) {
+
+    // _end: 25
+    // _order: DESC
+    // _sort: id
+    // _start: 0
+    // const query = this.ctx.query;
+
+    // console.dir(query);
+    console.log(" all");
+
     const {_start, _end, _order, _sort, ...filter} = this.ctx.query;
     console.dir(_start);
     console.dir(_end);
@@ -109,5 +105,7 @@ export class UserController {
     this.ctx.set("Access-Control-Expose-Headers", `X-Total-Count`);
 
     return a;
+
   }
+
 }
